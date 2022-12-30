@@ -1,3 +1,2 @@
 discord>=2.1.0
 requests
-epicstore_api
