@@ -4,7 +4,6 @@ import discord
 import requests
 from asyncio import sleep
 from os.path import isfile
-from epicstore_api import EpicGamesStoreAPI
 
 if __name__ == '__main__':
     intents = discord.Intents.default()
@@ -43,11 +42,11 @@ def updateDB(DB):
 async def on_ready():
     print(f'We have logged in as {client.user}')
     channel = client.get_channel(ARGS['announce_channel'])
-    egs_api = EpicGamesStoreAPI()
     
     while True:
         try:
-            free_games = egs_api.get_free_games()['data']['Catalog']['searchStore']['elements']
+            r = get_API('https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions?locale=en-US&country=US&allowCountries=US')
+            free_games = r['data']['Catalog']['searchStore']['elements']
         except: # if we except then try again later
             print(f'sleeping for {ARGS["check_interval"]} seconds')
             await sleep(ARGS['check_interval']) # sleep before retrying
