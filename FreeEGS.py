@@ -73,6 +73,11 @@ async def on_ready():
             if SLUG != None:
                 URL = f'https://store.epicgames.com/en-US/p/{SLUG}'
             
+            # check if is *currently* free
+            currentlyFree = False
+            if game['price']['totalPrice']['discountPrice'] == 0:
+                currentlyFree = True
+            
             isNewlyFree = False
             if ID in DB:
                 elapsed = NOW - DB[ID]['last_time_free']
@@ -84,8 +89,8 @@ async def on_ready():
             else:
                 isNewlyFree = True
             
-            if isNewlyFree:
-                #update db
+            if isNewlyFree and currentlyFree:
+                # update db
                 DB[ID] = {'last_time_free': NOW}
                 updateDB(DB)
                 print(f'{TITLE} is now free!')
