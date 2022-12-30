@@ -2,11 +2,9 @@ import json
 import time
 import discord
 import requests
-from epicstore_api import EpicGamesStoreAPI
+from asyncio import sleep
 from os.path import isfile
-
-# channel_id = 931169331147063317
-# pinged_role_id = 790055869026140190
+from epicstore_api import EpicGamesStoreAPI
 
 if __name__ == '__main__':
     intents = discord.Intents.default()
@@ -52,7 +50,7 @@ async def on_ready():
             free_games = egs_api.get_free_games()['data']['Catalog']['searchStore']['elements']
         except: # if we except then try again later
             print(f'sleeping for {ARGS["check_interval"]} seconds')
-            time.sleep(ARGS['check_interval']) # sleep before retrying
+            await sleep(ARGS['check_interval']) # sleep before retrying
             continue
         
         for game in free_games:
@@ -96,6 +94,6 @@ async def on_ready():
         
         # exit()
         print(f'sleeping for {ARGS["check_interval"]} seconds')
-        time.sleep(ARGS['check_interval'])
+        await sleep(ARGS['check_interval'])
     
 client.run(ARGS['TOKEN'])
