@@ -5,26 +5,6 @@ import requests
 from asyncio import sleep
 from os.path import isfile
 
-if __name__ == '__main__':
-    intents = discord.Intents.default()
-    intents.message_content = True
-    client = discord.Client(intents=intents)
-    
-    argfile = './config.cfg'
-    with open(argfile, 'r+') as f:
-        ARGS = json.loads(f.read())
-    
-    dbfile = './DB.json'
-    if not isfile(dbfile):
-        with open(dbfile, 'w+') as f:
-            f.write('{}')
-    with open(dbfile, 'r+') as f:
-        DB = json.loads(f.read())
-    
-else:
-    print('FreeEGS bot is not running as main!')
-    exit()
-
 def get_API(endpoint):
     r = requests.get(endpoint, headers = {'User-Agent': ARGS['useragent']})
     if r.status_code != 200:
@@ -37,6 +17,27 @@ def updateDB(DB):
         f.seek(0)
         f.write(json.dumps(DB).encode('utf-8'))
     return
+
+if __name__ == '__main__':
+    intents = discord.Intents.default()
+    intents.message_content = True
+    client = discord.Client(intents=intents)
+    
+    argfile = './config.cfg'
+    with open(argfile, 'r+') as f:
+        ARGS = json.loads(f.read())
+    
+    dbfile = './DB.json'
+    if not isfile(dbfile):
+        DB = {}
+        updateDB(DB)
+    else:
+        with open(dbfile, 'r+') as f:
+            DB = json.loads(f.read())
+    
+else:
+    print('FreeEGS bot is not running as main!')
+    exit()
 
 @client.event
 async def on_ready():
