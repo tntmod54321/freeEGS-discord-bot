@@ -34,7 +34,6 @@ if __name__ == '__main__':
     else:
         with open(dbfile, 'r+') as f:
             DB = json.loads(f.read())
-    
 else:
     print('FreeEGS bot is not running as main!')
     exit()
@@ -81,7 +80,8 @@ async def on_ready():
             isNewlyFree = False
             if ID in DB:
                 elapsed = NOW - DB[ID]['last_time_free']
-                free_interval = 605460 # 1 week + 11 mins
+                # free_interval = 605460 # 1 week + 11 mins
+                free_interval = 7776000 # 90 days
                 if elapsed >= free_interval:
                     isNewlyFree = True
                 else:
