@@ -67,6 +67,9 @@ async def on_ready():
                 if i['key'] == 'com.epicgames.app.productSlug':
                     SLUG = i['value']
             
+            if SLUG in ['[]']:
+                continue
+            
             # make url from slug
             URL = '(no url found)'
             if SLUG != None:
